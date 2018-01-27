@@ -630,6 +630,11 @@ vte_sequence_handler_decset_internal(VteTerminalPrivate *that,
 	static const struct decset_t settings[] = {
 #define PRIV_OFFSET(member) (G_STRUCT_OFFSET(VteTerminalPrivate, member))
 #define SCREEN_OFFSET(member) (-G_STRUCT_OFFSET(VteScreen, member))
+#ifdef ENABLE_MOUSE_TRACKING
+#define IFMOUSE(val) MOUSE_TRACKING_ ## val
+#else
+#define IFMOUSE(val) MOUSE_TRACKING_NONE
+#endif
 		/* 1: Application/normal cursor keys. */
 		{1, 0, PRIV_OFFSET(m_cursor_mode), 0,
 		 VTE_KEYMODE_NORMAL,
@@ -663,7 +668,7 @@ vte_sequence_handler_decset_internal(VteTerminalPrivate *that,
 		/* 9: Send-coords-on-click. */
 		{9, 0, PRIV_OFFSET(m_mouse_tracking_mode), 0,
 		 0,
-		 MOUSE_TRACKING_SEND_XY_ON_CLICK,
+		 IFMOUSE(SEND_XY_ON_CLICK),
 		 vte_reset_mouse_smooth_scroll_delta,
 		 vte_reset_mouse_smooth_scroll_delta,},
 		/* 12: disallowed, cursor blinks is set by user. */
@@ -708,25 +713,25 @@ vte_sequence_handler_decset_internal(VteTerminalPrivate *that,
 		/* 1000: Send-coords-on-button. */
 		{1000, 0, PRIV_OFFSET(m_mouse_tracking_mode), 0,
 		 0,
-		 MOUSE_TRACKING_SEND_XY_ON_BUTTON,
+		 IFMOUSE(SEND_XY_ON_BUTTON),
 		 vte_reset_mouse_smooth_scroll_delta,
 		 vte_reset_mouse_smooth_scroll_delta,},
 		/* 1001: Hilite tracking. */
 		{1001, 0, PRIV_OFFSET(m_mouse_tracking_mode), 0,
 		 (0),
-		 (MOUSE_TRACKING_HILITE_TRACKING),
+		 IFMOUSE(HILITE_TRACKING),
 		 vte_reset_mouse_smooth_scroll_delta,
 		 vte_reset_mouse_smooth_scroll_delta,},
 		/* 1002: Cell motion tracking. */
 		{1002, 0, PRIV_OFFSET(m_mouse_tracking_mode), 0,
 		 (0),
-		 (MOUSE_TRACKING_CELL_MOTION_TRACKING),
+		 IFMOUSE(CELL_MOTION_TRACKING),
 		 vte_reset_mouse_smooth_scroll_delta,
 		 vte_reset_mouse_smooth_scroll_delta,},
 		/* 1003: All motion tracking. */
 		{1003, 0, PRIV_OFFSET(m_mouse_tracking_mode), 0,
 		 (0),
-		 (MOUSE_TRACKING_ALL_MOTION_TRACKING),
+		 IFMOUSE(ALL_MOTION_TRACKING),
 		 vte_reset_mouse_smooth_scroll_delta,
 		 vte_reset_mouse_smooth_scroll_delta,},
 		/* 1004: Focus tracking. */

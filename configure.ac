@@ -322,6 +322,14 @@ PKG_CHECK_MODULES([APP],[
   gdk-pixbuf-2.0
   gtk+-$GTK_API_VERSION >= $GTK_REQUIRED])
 
+AC_ARG_ENABLE([mouse-tracking],
+  [AS_HELP_STRING([--disable-mouse-tracking], [disable mouse tracking support])],
+  [enable_mouse_tracking=no],[enable_mouse_tracking=yes])
+
+if test "x$enable_mouse_tracking" = "xyes"; then
+  AC_DEFINE([MOUSE_TRACKING],1,[Enable mouse tracking.])
+fi
+
 ################################################################################
 # Glade catalogue
 ################################################################################
